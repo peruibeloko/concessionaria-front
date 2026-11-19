@@ -1,6 +1,5 @@
+import { useAuthStore } from '@/stores/auth'
 import { createRouter, createWebHistory } from 'vue-router'
-
-const checkAuth = () => true
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,8 +19,9 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from) => {
-  if (to.name !== 'login' && !checkAuth()) {
+router.beforeEach(async (to, _from) => {
+  const auth = useAuthStore()
+  if (!auth.isAuth && to.name !== 'login') {
     return { name: 'login' }
   }
 })
